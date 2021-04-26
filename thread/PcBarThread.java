@@ -7,17 +7,20 @@ public class PcBarThread extends Thread{
   private Rectangle bar;
   private double y;
 
+  private boolean on = true;
+
   private final double MIN_Y = 0;
   private final double MAX_Y = 320;
 
   public PcBarThread(Rectangle bar){
     this.bar = bar;
+    y = bar.getY();
   }
 
   @Override
   public void run(){
     try{
-      while (true){
+      while (on){
         moveDown();
         moveUp();
       }
@@ -28,7 +31,7 @@ public class PcBarThread extends Thread{
   }
 
   public void moveDown() throws InterruptedException{
-    while(y < MAX_Y){
+    while(y < MAX_Y && on){
       y++;
       Platform.runLater( () -> bar.setY(y));
       Thread.sleep(2);
@@ -36,10 +39,14 @@ public class PcBarThread extends Thread{
   }
 
   public void moveUp() throws InterruptedException{
-    while(y > MIN_Y){
+    while(y > MIN_Y && on){
       y--;
       Platform.runLater( () -> bar.setY(y));
       Thread.sleep(2);
     }
+  }
+
+  public void setOn(boolean value){
+    this.on = value;
   }
 }
