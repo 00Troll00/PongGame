@@ -1,36 +1,40 @@
-package others;
+package view_generators;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
-public static class UpBar {
-  private static VBox bar;
+public class TopBar extends HBox{
+  private Button close = new Button();
+  private Button minimize = new Button();
+  private ImageView icon = new ImageView();
+  private Text title = new Text();
+  private Region region = new Region();
 
-  public static VBox generateUpBar(Stage stage){
-    Button close = new Button();
-    Button minimize = new Button();
-    ImageView icon = new ImageView();
-    Text title = new Text();
-    Region region = new Region();
+  public TopBar(Stage stage){
+    super();
+    close = new Button();
+    minimize = new Button();
+    icon = new ImageView();
+    title = new Text();
+    region = new Region();
 
-    VBox.setVgrow(region, Priority.ALWAYS);
+    HBox.setVgrow(region, Priority.ALWAYS);
     
-    //configing the bar
-    bar.setStyle("-fx-background-color: black;");
-    bar.setMaxHeight(25);
-    bar.setMinHeight(25);
-    bar.setPrefHeight(25);
-    bar.getChildren().addAll(icon, title, region, minimize, close);
+    //configing the hbox that contains the elements to the bar
+    super.setMaxHeight(25);
+    super.setMinHeight(25);
+    super.setPrefHeight(25);
+    super.getChildren().addAll(icon, title, region, minimize, close);
   }
 
   private static void setMoviment(Stage stage, Region region){
-
+    //
   }
 
   private static void setButtonInitialConfiguration(Button button){

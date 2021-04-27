@@ -15,10 +15,10 @@ public class BallThread extends Thread{
   private Text score;
   private boolean up = false;
   private boolean on = true;
-  private final double BOARD_GAME_MIN_X = 10;
-  private final double BOARD_GAME_MAX_X = 505;
-  private final double BOARD_GAME_MIN_Y = 0;
-  private final double BOARD_GAME_MAX_Y = 400;
+  private final double BOARD_GAME_MIN_X = 15;
+  private final double BOARD_GAME_MAX_X = 495;
+  private final double BOARD_GAME_MIN_Y = 5;
+  private final double BOARD_GAME_MAX_Y = 405;
 
 
   public BallThread(Rectangle ball, Rectangle leftBar, Rectangle rightBar, Text score){
@@ -26,8 +26,8 @@ public class BallThread extends Thread{
     this.rightBar = rightBar;
     this.leftBar = leftBar;
     this.ball = ball;
-    this.x = ball.getX();
-    this.y = ball.getY();
+    this.x = ball.getLayoutX();
+    this.y = ball.getLayoutY();
   }
 
   @Override
@@ -35,22 +35,22 @@ public class BallThread extends Thread{
     try{
       while(on){
         movingToRight();
-        if(y > rightBar.getY() - 10 && y < rightBar.getY() + rightBar.getHeight() + 10)
+        if(y > rightBar.getLayoutY() - 10 && y < rightBar.getLayoutY() + rightBar.getHeight() + 10)
           System.out.println("acertou");
         else{
           contLeftScore++;
           score.setText(contLeftScore + " | " + contRightScore);
-          Platform.runLater( () -> ball.setX(450));
+          Platform.runLater( () -> ball.setLayoutX(450));
           x=450;
           Thread.sleep(2);
         }   
         movingToLeft();
-        if(y > leftBar.getY() - 10 && y < leftBar.getY() + leftBar.getHeight() + 10)
+        if(y > leftBar.getLayoutY() - 10 && y < leftBar.getLayoutY() + leftBar.getHeight() + 10)
           System.out.println("acertou");
         else{
           contRightScore++;
           score.setText(contLeftScore + " | " + contRightScore);
-          Platform.runLater( () -> ball.setX(50));
+          Platform.runLater( () -> ball.setLayoutX(50));
           x=50;
           Thread.sleep(2);
         }          
@@ -70,9 +70,9 @@ public class BallThread extends Thread{
       while(y<BOARD_GAME_MAX_Y && x<BOARD_GAME_MAX_X-10 && on){
         Thread.sleep(10);
         x++;
-        Platform.runLater( () -> ball.setX(x));
+        Platform.runLater( () -> ball.setLayoutX(x));
         y++;
-        Platform.runLater( () -> ball.setY(y));
+        Platform.runLater( () -> ball.setLayoutY(y));
       }
       if(y>=BOARD_GAME_MAX_Y)
         up = true;
@@ -83,9 +83,9 @@ public class BallThread extends Thread{
       while(y>BOARD_GAME_MIN_Y && x<BOARD_GAME_MAX_X-10 && on){
         Thread.sleep(10);
         x++;
-        Platform.runLater( () -> ball.setX(x));
+        Platform.runLater( () -> ball.setLayoutX(x));
         y--;
-        Platform.runLater( () -> ball.setY(y));
+        Platform.runLater( () -> ball.setLayoutY(y));
       }//end while
       if(y<=BOARD_GAME_MIN_Y)
         up = false;
@@ -103,9 +103,9 @@ public class BallThread extends Thread{
       while(y>BOARD_GAME_MIN_Y && x > BOARD_GAME_MIN_X && on){
         Thread.sleep(10);
         x--;
-        Platform.runLater( () -> ball.setX(x));
+        Platform.runLater( () -> ball.setLayoutX(x));
         y--;
-        Platform.runLater( () -> ball.setY(y));
+        Platform.runLater( () -> ball.setLayoutY(y));
       }//end while
       if(y<=BOARD_GAME_MIN_Y)
         up = false;
@@ -116,9 +116,9 @@ public class BallThread extends Thread{
       while(y<BOARD_GAME_MAX_Y && x > BOARD_GAME_MIN_X && on){
         Thread.sleep(10);
         x--;
-        Platform.runLater( () -> ball.setX(x));
+        Platform.runLater( () -> ball.setLayoutX(x));
         y++;
-        Platform.runLater( () -> ball.setY(y));
+        Platform.runLater( () -> ball.setLayoutY(y));
       }
       if(y>=BOARD_GAME_MAX_Y)
         up = true;

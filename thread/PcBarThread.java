@@ -14,7 +14,7 @@ public class PcBarThread extends Thread{
 
   public PcBarThread(Rectangle bar){
     this.bar = bar;
-    y = bar.getY();
+    y = bar.getLayoutY();
   }
 
   @Override
@@ -33,7 +33,7 @@ public class PcBarThread extends Thread{
   public void moveDown() throws InterruptedException{
     while(y < MAX_Y && on){
       y++;
-      Platform.runLater( () -> bar.setY(y));
+      Platform.runLater( () -> bar.setLayoutY(y));
       Thread.sleep(2);
     }
   }
@@ -41,7 +41,7 @@ public class PcBarThread extends Thread{
   public void moveUp() throws InterruptedException{
     while(y > MIN_Y && on){
       y--;
-      Platform.runLater( () -> bar.setY(y));
+      Platform.runLater( () -> bar.setLayoutY(y));
       Thread.sleep(2);
     }
   }

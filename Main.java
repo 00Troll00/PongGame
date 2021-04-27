@@ -1,5 +1,5 @@
 /************************************
- * "MAKE THE GAME MODULAR YOU IDIOT!!!" - me to myself
+ * "MAKE THE GAME MODULAR, IDIOT!!!" - me to myself
  ************************************/
 
 import javax.accessibility.AccessibleValue;
@@ -29,10 +29,12 @@ import javafx.stage.Stage;
 
 import thread.BallThread;
 import thread.PcBarThread;
+import view_generators.GameBoard;
+import view_generators.Menu;
 
 public class Main extends Application{
   //menu objects
-  private VBox vBoxMenu;
+  /*private VBox vBoxMenu;
   private Rectangle menuBorder;
   private Text score;
   private Region regionMenu;
@@ -55,12 +57,38 @@ public class Main extends Application{
   private boolean movingUpPlayerTwo = false;
   private boolean movingDownPlayerTwo = false;
   private double playerOneY;
-  private double rightBarY;
+  private double rightBarY;*/
+
+  private GameBoard gameBoard;
+  private Menu menu;
+
+  private HBox gameHBox;
+  private AnchorPane root;
+  private Scene scene;
 
   public static void main(String[] args) {
     launch(args);
   }
+  @Override
+  public void start(Stage stage) throws Exception {
+    gameBoard = new GameBoard();
+    menu = new Menu(gameBoard);
 
+
+    gameHBox = new HBox();
+    gameHBox.getChildren().addAll(gameBoard, menu);
+    
+    root = new AnchorPane();
+    root.getChildren().add(gameHBox);
+
+    scene = new Scene(root, gameBoard.BOARD_SIZE_X + menu.MENU_SIZE_X, gameBoard.BOARD_SIZE_Y);
+
+    stage.setScene(scene);
+    stage.setResizable(false);
+    stage.show();
+  }
+  
+  /*
   @Override
   public void start(Stage primaryStage) throws Exception {
     //creating the ball
@@ -330,7 +358,7 @@ public class Main extends Application{
     
     //adding nodes to the HBox
     playerTwoHbox.getChildren().addAll(playerTwo, text);
-  }
+  }*/
 }//end class Main
 
 /**
