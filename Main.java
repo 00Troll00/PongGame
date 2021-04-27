@@ -1,3 +1,7 @@
+/************************************
+ * "MAKE THE GAME MODULAR YOU IDIOT!!!" - me to myself
+ ************************************/
+
 import javax.accessibility.AccessibleValue;
 
 import javafx.animation.AnimationTimer;
@@ -9,9 +13,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -31,18 +37,25 @@ public class Main extends Application{
   private Text score;
   private Region regionMenu;
   private Button startButton;
+  private Button playerTwo;
+  private boolean isPlayerTwoActiated = false;
+  private HBox playerTwoHbox;
 
   private Rectangle playerBar;
-  private Rectangle rigthBar;
+  private Rectangle rightBar;
+  AnimationTimer playerTwoAnimationTimer;
 
   //threads
   private PcBarThread pcThread;
   private BallThread ballThread;
 
   private Scene scene;
-  private boolean movingUp = false;
-  private boolean movingDown = false;
+  private boolean movingUpPlayerOne = false;
+  private boolean movingDownPlayerOne = false;
+  private boolean movingUpPlayerTwo = false;
+  private boolean movingDownPlayerTwo = false;
   private double playerOneY;
+  private double rightBarY;
 
   public static void main(String[] args) {
     launch(args);
@@ -63,24 +76,23 @@ public class Main extends Application{
     playerBarAnimation();
 
     //creating the pc bar or second player bar
-    rigthBar = new Rectangle(500, 200, 10, 90);
-    rigthBar.setStroke(Color.WHITE);
-    rigthBar.setFill(Color.WHITE);
+    rightBar = new Rectangle(500, 200, 10, 90);
+    rightBar.setStroke(Color.WHITE);
+    rightBar.setFill(Color.WHITE);
 
     //creating the menu
     menu();
 
     //creating the pane and scene
-    AnchorPane root = new AnchorPane(ball, playerBar, rigthBar, menuBorder, vBoxMenu);
+    AnchorPane root = new AnchorPane(ball, playerBar, rightBar, menuBorder, vBoxMenu);
     root.setStyle("-fx-background-color: black;");
     scene = new Scene(root, 655, 400);
     addHandlePlayerBar();
 
-    //creating the Threads
-    ballThread = new BallThread(ball, playerBar, rigthBar, score);
+    pcThread = new PcBarThread(rightBar);
+    ballThread = new BallThread(ball, playerBar, rightBar, score);
 
-    pcThread = new PcBarThread(rigthBar);
-
+    //the start and reset fuctions
     startButton.setOnAction(new EventHandler<ActionEvent>(){
       @Override
       public void handle(ActionEvent e){
@@ -98,16 +110,25 @@ public class Main extends Application{
                 ball.setX(50);
                 ball.setY(25);
                 startButton.setDisable(false);
+                score.setText("0 | 0");
               });
             }
             catch(InterruptedException ex){ }
           });
           thread.start();
         }
-        else{//add thread to wate the time that to have a real reset
-          pcThread = new PcBarThread(rigthBar);
-          pcThread.start();
-          ballThread = new BallThread(ball, playerBar, rigthBar, score);
+        else{
+          if(isPlayerTwoActiated){
+            rightBarY = rightBar.getY();
+            playerTwoAnimation();
+          }
+          else{          
+            pcThread = new PcBarThread(rightBar);
+            pcThread.start();
+            if(playerTwoAnimationTimer != null)
+              playerTwoAnimationTimer.stop();
+          }
+          ballThread = new BallThread(ball, playerBar, rightBar, score);
           ballThread.start();
           startButton.setText("RESET");
         }          
@@ -116,8 +137,10 @@ public class Main extends Application{
     
     //configurations for the stage
     primaryStage.setOnCloseRequest(e -> {
-      ballThread.interrupt();
-      pcThread.interrupt();
+      if(pcThread.isAlive() || ballThread.isAlive()){
+        ballThread.interrupt();
+        pcThread.interrupt();
+      }
       System.exit(0);
     });
     primaryStage.setScene(scene);
@@ -134,6 +157,16 @@ public class Main extends Application{
     score = new Text("0 | 0");
     score.setFill(Color.WHITE);
     score.setStyle("-fx-font-size: 16px;");
+
+    //configs to the player two button
+    playerTwo = new Button(" ");
+    playerTwo.setStyle("-fx-background-color: black; -fx-border-color: white;");
+    playerTwo.setTextFill(Color.WHITE);
+    playerTwo.setMinWidth(31);
+    playerTwoButonActions();
+
+    //function to config the HBox
+    playerTwoHBoxConfig();
 
     //configs to the VBox
     vBoxMenu = new VBox();
@@ -172,7 +205,7 @@ public class Main extends Application{
     text.setFill(Color.WHITE);
     text.setStyle("-fx-font-size: 18px;");
 
-    vBoxMenu.getChildren().addAll(text, score, regionMenu, startButton);
+    vBoxMenu.getChildren().addAll(text, score, playerTwoHbox, regionMenu, startButton);
   }//end menu
   
   //add the player bar animation
@@ -180,11 +213,11 @@ public class Main extends Application{
     AnimationTimer timer = new AnimationTimer(){
       @Override
       public void handle(long now){
-        if(movingUp && playerOneY > 0){
+        if(movingUpPlayerOne && playerOneY > 0){
           playerOneY -= 5;
           playerBar.setY(playerOneY);
         }
-        if(movingDown && playerOneY < 320){
+        if(movingDownPlayerOne && playerOneY < 320){
           playerOneY += 5;
           playerBar.setY(playerOneY);
         }
@@ -193,6 +226,24 @@ public class Main extends Application{
     timer.start();
   }
 
+  //adding the playerTwo animation
+  public void playerTwoAnimation(){
+    AnimationTimer playerTwoAnimationTimer = new AnimationTimer(){
+      @Override
+      public void handle(long now){
+        if(movingUpPlayerTwo && rightBarY > 0){
+          rightBarY -= 5;
+          rightBar.setY(rightBarY);
+        }
+        if(movingDownPlayerTwo && rightBarY < 320){
+          rightBarY += 5;
+          rightBar.setY(rightBarY);
+        }
+      }
+    };
+    playerTwoAnimationTimer.start();
+  }
+  
   //add the key functions
   public void addHandlePlayerBar(){
     scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
@@ -200,10 +251,16 @@ public class Main extends Application{
       public void handle(KeyEvent e){
         switch(e.getCode()){
           case W:
-            movingUp = true;
+            movingUpPlayerOne = true;
             break;
           case S:
-            movingDown = true;
+            movingDownPlayerOne = true;
+            break;
+          case UP:
+            movingUpPlayerTwo = true;
+            break;
+          case DOWN:
+            movingDownPlayerTwo = true;
             break;
           default:
         }
@@ -215,16 +272,65 @@ public class Main extends Application{
       public void handle(KeyEvent e){
         switch(e.getCode()){
           case W:
-            movingUp = false;
+            movingUpPlayerOne = false;
             break;
           case S:
-            movingDown = false;
+            movingDownPlayerOne = false;
+            break;
+          case UP:
+            movingUpPlayerTwo = false;
+            break;
+          case DOWN:
+            movingDownPlayerTwo = false;
             break;
           default:
         }
       }
     });
   }//end addHandlePlayerBar
+
+  public void playerTwoButonActions(){
+    playerTwo.setOnAction(new EventHandler<ActionEvent>(){
+      @Override
+      public void handle(ActionEvent e){
+        if(isPlayerTwoActiated){
+          playerTwo.setText(" ");
+          isPlayerTwoActiated = false;
+        }
+        else{
+          playerTwo.setText("X");
+          isPlayerTwoActiated = true;
+        }
+      }
+    });
+
+    playerTwo.setOnMouseEntered(new EventHandler<MouseEvent>(){
+      @Override
+      public void handle(MouseEvent e){
+        playerTwo.setStyle("-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 10px;");
+      }
+    });
+
+    playerTwo.setOnMouseExited(new EventHandler<MouseEvent>(){
+      @Override
+      public void handle(MouseEvent e){
+        playerTwo.setStyle("-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 0px;");
+      }
+    });
+  }
+
+  public void playerTwoHBoxConfig(){
+    playerTwoHbox = new HBox();
+
+    //text to display biside the button
+    Text text = new Text("Two Players");
+    text.setFill(Color.WHITE);
+    text.setStyle("-fx-font-size: 16px;");
+    HBox.setMargin(text, new Insets(5, 0, 0, 5));
+    
+    //adding nodes to the HBox
+    playerTwoHbox.getChildren().addAll(playerTwo, text);
+  }
 }//end class Main
 
 /**
