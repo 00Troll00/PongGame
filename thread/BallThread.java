@@ -1,8 +1,8 @@
 package thread;
 
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class BallThread extends Thread{
   private double x;
@@ -12,7 +12,7 @@ public class BallThread extends Thread{
   private Rectangle rightBar;
   private int contLeftScore;
   private int contRightScore;
-  private Text score;
+  private Label score;
   private boolean up = false;
   private boolean on = true;
   private final double BOARD_GAME_MIN_X = 15;
@@ -21,7 +21,7 @@ public class BallThread extends Thread{
   private final double BOARD_GAME_MAX_Y = 405;
 
 
-  public BallThread(Rectangle ball, Rectangle leftBar, Rectangle rightBar, Text score){
+  public BallThread(Rectangle ball, Rectangle leftBar, Rectangle rightBar, Label score){
     this.score = score;
     this.rightBar = rightBar;
     this.leftBar = leftBar;
@@ -39,8 +39,10 @@ public class BallThread extends Thread{
           System.out.println("acertou");
         else{
           contLeftScore++;
-          score.setText(contLeftScore + " | " + contRightScore);
-          Platform.runLater( () -> ball.setLayoutX(450));
+          Platform.runLater( () -> {
+            score.setText(contLeftScore + " | " + contRightScore);
+            Platform.runLater( () -> ball.setLayoutX(450));
+          });
           x=450;
           Thread.sleep(2);
         }   
@@ -49,13 +51,15 @@ public class BallThread extends Thread{
           System.out.println("acertou");
         else{
           contRightScore++;
-          score.setText(contLeftScore + " | " + contRightScore);
-          Platform.runLater( () -> ball.setLayoutX(50));
+          Platform.runLater( () -> {
+            score.setText(contLeftScore + " | " + contRightScore);
+            ball.setLayoutX(50);
+          });
           x=50;
           Thread.sleep(2);
         }          
       }
-      score.setText("0 | 0");
+      Platform.runLater( () -> score.setText("0 | 0"));
     }
     catch(InterruptedException e){
 

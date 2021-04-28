@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -19,8 +20,8 @@ public class Menu extends VBox{
   private Button btnStart;
   private Button btnTwoPlayers;
   
-  //the text that shows the score
-  private Text score;
+  //the label that shows the score
+  private Label score;
   
   //boolean variable that is true if two players option is selected (default = false)
   private boolean isTwoPlayersSelected = false;
@@ -41,16 +42,17 @@ public class Menu extends VBox{
 
     //configs to the btnStart
     btnStart = new Button("START");
-    btnStart.setPrefWidth(200);
+    btnStart.setMinSize(140, 35);
     startResetGame();
 
     //configs to the btnTwoPlayers
     btnTwoPlayers = new Button(" ");
+    btnTwoPlayers.setMinSize(31, 31);
     onOffTwoPlayers();
 
     //configs to the hbox
     hBoxTwoPlayers = new HBox();
-    Text text = new Text("Two Players");
+    Label text = new Label("Two Players");
     HBox.setMargin(text, new Insets(4, 0, 0, 0));
     hBoxTwoPlayers.getChildren().addAll(btnTwoPlayers, text);
     hBoxTwoPlayers.setSpacing(5);
@@ -61,10 +63,10 @@ public class Menu extends VBox{
     VBox.setVgrow(region, Priority.ALWAYS);
 
     //Text that has "SCORE" in it
-    Text scoreText = new Text("SCORE");
+    Label scoreLabel= new Label("SCORE");
 
     //config to the score
-    score = new Text("0 | 0");
+    score = new Label("0 | 0");
 
     super.setPadding(new Insets(5, 5, 5, 5));
     super.setWidth(MENU_SIZE_X);
@@ -72,7 +74,7 @@ public class Menu extends VBox{
     super.setHeight(MENU_SIZE_Y);
     super.setSpacing(5);
     super.setAlignment(Pos.CENTER);
-    super.getChildren().addAll(scoreText, score, hBoxTwoPlayers, region, btnStart);
+    super.getChildren().addAll(scoreLabel, score, hBoxTwoPlayers, region, btnStart);
   }
 
   public void startResetGame(){

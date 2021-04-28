@@ -23,14 +23,16 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import thread.BallThread;
 import thread.PcBarThread;
 import view_generators.GameBoard;
 import view_generators.Menu;
+import view_generators.TopBar;
 
 public class Main extends Application{
   //menu objects
@@ -61,7 +63,9 @@ public class Main extends Application{
 
   private GameBoard gameBoard;
   private Menu menu;
+  private TopBar topBar;
 
+  private VBox allBox;
   private HBox gameHBox;
   private AnchorPane root;
   private Scene scene;
@@ -77,17 +81,34 @@ public class Main extends Application{
 
     gameHBox = new HBox();
     gameHBox.getChildren().addAll(gameBoard, menu);
-    
-    root = new AnchorPane();
-    root.getChildren().add(gameHBox);
 
-    scene = new Scene(root, gameBoard.BOARD_SIZE_X + menu.MENU_SIZE_X, gameBoard.BOARD_SIZE_Y);
+    topBar = new TopBar();
+    topBar.configButtonsAction(stage, gameBoard);
+    topBar.setMoviment(stage);
+
+    //lines in the view
+    Rectangle topLine = new Rectangle(0, topBar.BAR_SIZE_Y+2, 500, 2);
+    topLine.setFill(Color.WHITE);
+
+    allBox = new VBox();
+    allBox.getChildren().addAll(topBar, gameHBox);
+    allBox.setSpacing(2);
+
+    topLine.setWidth(allBox.getPrefWidth());
+
+    root = new AnchorPane();
+    root.getChildren().addAll(allBox);
+
+    scene = new Scene(root, allBox.getPrefWidth(), allBox.getPrefHeight());
+    scene.getStylesheets().add("/styles/main_style.css");
+
+    gameBoard.setScene(scene);
 
     stage.setScene(scene);
     stage.setResizable(false);
+    stage.initStyle(StageStyle.UNDECORATED);
     stage.show();
-  }
-  
+  }  
   /*
   @Override
   public void start(Stage primaryStage) throws Exception {
