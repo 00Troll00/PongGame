@@ -78,23 +78,24 @@ public class Main extends Application{
     gameBoard = new GameBoard();
     menu = new Menu(gameBoard);
 
+    //lines in the view
+    Rectangle topLine = new Rectangle(gameBoard.BOARD_SIZE_X + menu.MENU_SIZE_X + 10, 1);
+    topLine.setFill(Color.WHITE);
+    Rectangle horizontalLine = new Rectangle(1, menu.MENU_SIZE_Y + 10);
+    horizontalLine.setFill(Color.WHITE);
 
+    //hbox with the gameboard and the menu
     gameHBox = new HBox();
-    gameHBox.getChildren().addAll(gameBoard, menu);
+    gameHBox.getChildren().addAll(gameBoard, horizontalLine, menu);
 
     topBar = new TopBar();
     topBar.configButtonsAction(stage, gameBoard);
     topBar.setMoviment(stage);
 
-    //lines in the view
-    Rectangle topLine = new Rectangle(0, topBar.BAR_SIZE_Y+2, 500, 2);
-    topLine.setFill(Color.WHITE);
-
+    //vbox with the topBar and gameHBox
     allBox = new VBox();
-    allBox.getChildren().addAll(topBar, gameHBox);
+    allBox.getChildren().addAll(topBar, topLine, gameHBox);
     allBox.setSpacing(2);
-
-    topLine.setWidth(allBox.getPrefWidth());
 
     root = new AnchorPane();
     root.getChildren().addAll(allBox);

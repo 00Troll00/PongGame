@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import util.Util;
 
 public class TopBar extends HBox{
   private Button close;
@@ -38,6 +39,11 @@ public class TopBar extends HBox{
     icon = new ImageView();
     title = new Label("Title");
     region = new Region();
+
+    //setting the buttons on mouse enter and exited
+    Util.setButtonStyleConfiguration(close);
+    Util.setButtonStyleConfiguration(minimize);
+
 
     region.setMinHeight(BAR_SIZE_Y);
 
@@ -97,24 +103,6 @@ public class TopBar extends HBox{
     });
     region.setOnMouseReleased(m -> {
       region.setCursor(Cursor.DEFAULT);
-    });
-  }
-
-  private static void setButtonStyleConfiguration(Button button){
-    button.setOnMouseEntered(new EventHandler<MouseEvent>(){
-      @Override
-      public void handle(MouseEvent e){
-        button.setStyle("-fx-background-color: white; -fx-border-color: white;");
-        button.setTextFill(Color.BLACK);
-      }
-    });
-
-    button.setOnMouseExited(new EventHandler<MouseEvent>(){
-      @Override
-      public void handle(MouseEvent e){
-        button.setStyle("-fx-background-color: black; -fx-border-color: white;");
-        button.setTextFill(Color.WHITE);
-      }
     });
   }
 }

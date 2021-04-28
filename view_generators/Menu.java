@@ -11,7 +11,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import view_generators.GameBoard;
+
+import util.Util;
 
 public class Menu extends VBox{
   public final double MENU_SIZE_X = 150;
@@ -44,11 +45,14 @@ public class Menu extends VBox{
     btnStart = new Button("START");
     btnStart.setMinSize(140, 35);
     startResetGame();
+    //setting the buttons on mouse enter and exited
+    Util.setButtonStyleConfiguration(btnStart);
 
     //configs to the btnTwoPlayers
     btnTwoPlayers = new Button(" ");
     btnTwoPlayers.setMinSize(31, 31);
     onOffTwoPlayers();
+    btnTwoPlayersStyleConfiguration();
 
     //configs to the hbox
     hBoxTwoPlayers = new HBox();
@@ -99,6 +103,15 @@ public class Menu extends VBox{
           btnTwoPlayers.setText("X");
         }
       }
+    });
+  }
+
+  public void btnTwoPlayersStyleConfiguration(){
+    btnTwoPlayers.setOnMouseEntered(m -> {
+      btnTwoPlayers.setStyle("-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 30px;");
+    });
+    btnTwoPlayers.setOnMouseExited(m-> {
+      btnTwoPlayers.setStyle("-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 0px;");
     });
   }
   
