@@ -1,4 +1,4 @@
-package view_generators;
+package view;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

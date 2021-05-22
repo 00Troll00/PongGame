@@ -13,7 +13,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -28,11 +27,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import thread.BallThread;
 import thread.PcBarThread;
-import view_generators.GameBoard;
-import view_generators.Menu;
-import view_generators.TopBar;
+import view.*;
 
 public class Main extends Application{
   //menu objects
@@ -73,6 +71,7 @@ public class Main extends Application{
   public static void main(String[] args) {
     launch(args);
   }
+  
   @Override
   public void start(Stage stage) throws Exception {
     gameBoard = new GameBoard();

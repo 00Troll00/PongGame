@@ -34,7 +34,7 @@ public class BallThread extends Thread{
   public void run(){
     try{
       while(on){
-        movingToRight();
+        movingToRight();//use a function to make this verification, passing a bar to it
         if(y > rightBar.getLayoutY() - 10 && y < rightBar.getLayoutY() + rightBar.getHeight() + 10)
           System.out.println("acertou");
         else{
@@ -68,32 +68,33 @@ public class BallThread extends Thread{
 
   public void movingToRight() throws InterruptedException{
     System.out.println(x);
-    //the ball is going down
+    //the ball is moving to the right
     while(x<BOARD_GAME_MAX_X-10 && on){
+      //the ball is going down
       if(!up){
-      while(y<BOARD_GAME_MAX_Y && x<BOARD_GAME_MAX_X-10 && on){
-        Thread.sleep(10);
-        x++;
-        Platform.runLater( () -> ball.setLayoutX(x));
-        y++;
-        Platform.runLater( () -> ball.setLayoutY(y));
-      }
-      if(y>=BOARD_GAME_MAX_Y)
-        up = true;
-      }
+        while(y<BOARD_GAME_MAX_Y && x<BOARD_GAME_MAX_X-10 && on){
+          Thread.sleep(10);
+          x++;
+          Platform.runLater( () -> ball.setLayoutX(x));
+          y++;
+          Platform.runLater( () -> ball.setLayoutY(y));
+        }//end while
+        if(y>=BOARD_GAME_MAX_Y)
+          up = true;
+      }//end if
       System.out.println(x);
       //the ball is going up
       if(up){
-      while(y>BOARD_GAME_MIN_Y && x<BOARD_GAME_MAX_X-10 && on){
-        Thread.sleep(10);
-        x++;
-        Platform.runLater( () -> ball.setLayoutX(x));
-        y--;
-        Platform.runLater( () -> ball.setLayoutY(y));
-      }//end while
-      if(y<=BOARD_GAME_MIN_Y)
-        up = false;
-      }
+        while(y>BOARD_GAME_MIN_Y && x<BOARD_GAME_MAX_X-10 && on){
+          Thread.sleep(10);
+          x++;
+          Platform.runLater( () -> ball.setLayoutX(x));
+          y--;
+          Platform.runLater( () -> ball.setLayoutY(y));
+        }//end while
+        if(y<=BOARD_GAME_MIN_Y)
+          up = false;
+      }//end if
 
       System.out.println(x);
       //System.out.println("1");
@@ -101,32 +102,33 @@ public class BallThread extends Thread{
   }//end movingToRight
 
   public void movingToLeft() throws InterruptedException{
+    //the ball is going to the left
     while (x > BOARD_GAME_MIN_X && on){
       //the ball is going up
       if(up){
-      while(y>BOARD_GAME_MIN_Y && x > BOARD_GAME_MIN_X && on){
-        Thread.sleep(10);
-        x--;
-        Platform.runLater( () -> ball.setLayoutX(x));
-        y--;
-        Platform.runLater( () -> ball.setLayoutY(y));
-      }//end while
-      if(y<=BOARD_GAME_MIN_Y)
-        up = false;
-      }
+        while(y>BOARD_GAME_MIN_Y && x > BOARD_GAME_MIN_X && on){
+          Thread.sleep(10);
+          x--;
+          Platform.runLater( () -> ball.setLayoutX(x));
+          y--;
+          Platform.runLater( () -> ball.setLayoutY(y));
+        }//end while
+        if(y<=BOARD_GAME_MIN_Y)
+          up = false;
+      }//end if
 
       //the ball is going down
       if(!up){
-      while(y<BOARD_GAME_MAX_Y && x > BOARD_GAME_MIN_X && on){
-        Thread.sleep(10);
-        x--;
-        Platform.runLater( () -> ball.setLayoutX(x));
-        y++;
-        Platform.runLater( () -> ball.setLayoutY(y));
-      }
-      if(y>=BOARD_GAME_MAX_Y)
-        up = true;
-      }
+        while(y<BOARD_GAME_MAX_Y && x > BOARD_GAME_MIN_X && on){
+          Thread.sleep(10);
+          x--;
+          Platform.runLater( () -> ball.setLayoutX(x));
+          y++;
+          Platform.runLater( () -> ball.setLayoutY(y));
+        }//end while
+        if(y>=BOARD_GAME_MAX_Y)
+          up = true;
+      }//end if
     }
   }//end movingToLeft
 
@@ -134,9 +136,3 @@ public class BallThread extends Thread{
     this.on = value;
   }
 }
-
-/**
- * TODO
- *    (DONE) planning how the ball will move
- *    (DONE) make a function to each state of moviment
- */
