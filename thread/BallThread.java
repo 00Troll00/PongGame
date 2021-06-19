@@ -35,8 +35,11 @@ public class BallThread extends Thread{
     try{
       while(on){
         movingToRight();//use a function to make this verification, passing a bar to it
+
+        //if the ball hits the right bar
         if(y > rightBar.getLayoutY() - 10 && y < rightBar.getLayoutY() + rightBar.getHeight() + 10)
           System.out.println("acertou");
+        //else
         else{
           contLeftScore++;
           Platform.runLater( () -> {
@@ -47,8 +50,11 @@ public class BallThread extends Thread{
           Thread.sleep(2);
         }   
         movingToLeft();
+
+        //if the ball hits the left bar
         if(y > leftBar.getLayoutY() - 10 && y < leftBar.getLayoutY() + leftBar.getHeight() + 10)
           System.out.println("acertou");
+        //else
         else{
           contRightScore++;
           Platform.runLater( () -> {

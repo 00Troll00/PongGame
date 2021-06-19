@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -90,6 +91,7 @@ public class Main extends Application{
     topBar = new TopBar();
     topBar.configButtonsAction(stage, gameBoard);
     topBar.setMoviment(stage);
+    topBar.setIcon("/resources/images/icon.png");
 
     //vbox with the topBar and gameHBox
     allBox = new VBox();
@@ -104,6 +106,8 @@ public class Main extends Application{
 
     gameBoard.setScene(scene);
 
+    stage.setTitle("Pong");
+    stage.getIcons().add(new Image("/resources/images/icon.png"));
     stage.setScene(scene);
     stage.setResizable(false);
     stage.initStyle(StageStyle.UNDECORATED);

@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -37,7 +38,7 @@ public class TopBar extends HBox{
     close = new Button("X");
     minimize = new Button("_");
     icon = new ImageView();
-    title = new Label("Title");
+    title = new Label("Pong");
     region = new Region();
 
     //setting the buttons on mouse enter and exited
@@ -71,6 +72,11 @@ public class TopBar extends HBox{
     });
   }
 
+  public void setIcon(String imagePath){
+    icon.setImage(new Image(imagePath, 25, 25, false, false));
+  }
+
+  //configs to close the game and more
   public void configButtonsAction(Stage stage, GameBoard gameBoard){
     close.setOnAction(new EventHandler<ActionEvent>(){
       @Override
